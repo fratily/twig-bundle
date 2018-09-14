@@ -76,5 +76,13 @@ class TwigConfig extends ContainerConfig{
             ->value("twig.option.auto_reload", null)
             ->value("twig.option.optimizations", -1)
         ;
+
+        $container
+            ->setter(
+                \Twig_Environment::class,
+                "setTwigEnvironment",
+                $container->lazyGet("twig")
+            )
+        ;
     }
 }
