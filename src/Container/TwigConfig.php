@@ -79,7 +79,7 @@ class TwigConfig extends ContainerConfig{
 
         $container
             ->setter(
-                \Twig_Environment::class,
+                \Fratily\Bundle\Twig\Controller\Traits\TwigTrait::class,
                 "setTwigEnvironment",
                 $container->lazyGet("twig")
             )
