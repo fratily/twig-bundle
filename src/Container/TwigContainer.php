@@ -51,7 +51,7 @@ class TwigContainer extends AbstractContainer{
             ->add(
                 "options",
                 $builder->lazyArray([
-                    "debug" => $options["debug"]
+                    "debug" => $options["debug"] ?? false
                 ])
             )
         ;
