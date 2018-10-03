@@ -60,4 +60,12 @@ class TwigContainer extends AbstractContainer{
             ->add("setTwigEnvironment", $builder->lazyGet("twig"))
         ;
     }
+
+    public static function modify(\Fratily\Container\Container $container){
+        $loader = $container->get("twig.loader");
+
+        foreach($container->getTagged("twig.loader") as $subLoader){
+            $loader->addLoader($subLoader);
+        }
+    }
 }
