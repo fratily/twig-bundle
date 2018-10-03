@@ -17,7 +17,10 @@ use Fratily\Kernel\Bundle\Bundle;
 
 class TwigBundle extends Bundle{
 
-    public function registerContainerConfigurations(): array{
+    /**
+     * {@inheritdocs}
+     */
+    public function registerContainers(): array{
         return [
             new Container\TwigConfig($this->isDebug()),
         ];
