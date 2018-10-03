@@ -22,7 +22,7 @@ class TwigBundle extends Bundle{
      */
     public function registerContainers(): array{
         return [
-            new Container\TwigConfig($this->isDebug()),
+            Container\TwigContainer::class,
         ];
     }
 }
