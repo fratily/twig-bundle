@@ -13,6 +13,7 @@
  */
 namespace Fratily\Bundle\Twig\Controller\Traits;
 
+use Fratily\Kernel\Controller\AbstractController;
 use Fratily\Http\Message\Response;
 use Fratily\Http\Message\StreamFactory;
 use Twig_Environment;
@@ -82,7 +83,13 @@ trait TwigTrait{
     ): ResponseInterface{
         $view       = $this->renderRaw($name, $context);
         $factory    = $streamFactory ?? new StreamFactory();
-        $response   = $response ?? new Response();
+        $response   = $response
+            ?? (
+                $this instanceof AbstractController
+                    ? $this->generateResponse(200, "")
+                    : new Response(200)
+            )
+        ;
 
         return $response->withBody($factory->createStream($view));
     }
