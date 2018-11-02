@@ -14,14 +14,14 @@
 namespace Fratily\Bundle\Twig\Container;
 
 use Fratily\Container\Builder\AbstractContainer;
-use Fratily\Container\Builder\ContainerBuilderInterface;
+use Fratily\Container\Builder\ContainerBuilder;
 
 class TwigContainer extends AbstractContainer{
 
     /**
      * {@inheritdoc}
      */
-    public static function build(ContainerBuilderInterface $builder, array $options){
+    public static function build(ContainerBuilder $builder, array $options){
         $builder
             ->add(
                 "twig",
@@ -51,14 +51,24 @@ class TwigContainer extends AbstractContainer{
             ->add(
                 "options",
                 $builder->lazyArray([
-                    "debug" => $options["debug"] ?? false
+                    "debug" => $builder->LazyGetShareValue("kernel.debug"),
+                    "cache" => $builder->LazyGetShareValue("twig.cache"),
                 ])
             )
         ;
 
-        $builder->setter(\Fratily\Bundle\Twig\Controller\Traits\TwigTrait::class)
-            ->add("setTwigEnvironment", $builder->lazyGet("twig"))
-        ;
+        $builder->addShareValue(
+            "twig.cache",
+            $builder->lazyCallable(
+                function($kernel){
+                    return
+                        $kernel->getConfig()->getProjectDir()
+                        . implode(DIRECTORY_SEPARATOR, ["", "var", "twig"])
+                    ;
+                },
+                [$builder->lazyGet("kernel")]
+            )
+        );
     }
 
     public static function modify(\Fratily\Container\Container $container){
